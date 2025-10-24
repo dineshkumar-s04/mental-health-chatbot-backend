@@ -21,7 +21,8 @@ def get_bot_response(message):
 
 @app.route('/chat', methods=['POST'])
 def chat():
-    user_message = request.json.get('message', '')
+    data = request.get_json(silent=True) or {}
+    user_message = data.get('message', '')
     reply = get_bot_response(user_message)
     return jsonify({'reply': reply})
 

@@ -9,7 +9,6 @@ CORS(app)
 # Groq API configuration
 GROQ_API_KEY = "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"
 client = Groq(api_key=GROQ_API_KEY)
-
 @app.route('/', methods=['GET'])
 def home():
     return jsonify({"message": "Mental Health Chatbot API is running with Groq!"})

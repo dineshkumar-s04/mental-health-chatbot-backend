@@ -1,25 +1,18 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import requests
+from groq import Groq
 import os
 
 app = Flask(__name__)
 CORS(app)
 
-# Hugging Face API configuration
-API_URL = "https://api-inference.huggingface.co/models/microsoft/DialoGPT-small"
-HF_TOKEN = "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"  # Your Hugging Face API token
-
-headers = {"Authorization": f"Bearer {HF_TOKEN}"}
-
-def query_huggingface(payload):
-    """Query Hugging Face Inference API"""
-    response = requests.post(API_URL, headers=headers, json=payload)
-    return response.json()
+# Groq API configuration
+GROQ_API_KEY = "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"
+client = Groq(api_key=GROQ_API_KEY)
 
 @app.route('/', methods=['GET'])
 def home():
-    return jsonify({"message": "Mental Health Chatbot API is running!"})
+    return jsonify({"message": "Mental Health Chatbot API is running with Groq!"})
 
 @app.route('/chat', methods=['POST'])
 def chat():
@@ -30,22 +23,24 @@ def chat():
         if not user_message:
             return jsonify({"error": "No message provided"}), 400
         
-        # Query Hugging Face API
-        response = query_huggingface({
-            "inputs": user_message,
-            "parameters": {
-                "max_new_tokens": 50,
-                "temperature": 0.7,
-                "top_p": 0.9,
-                "do_sample": True
-            }
-        })
+        # Call Groq API with Llama model
+        chat_completion = client.chat.completions.create(
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are a compassionate mental health support assistant. Provide empathetic, supportive responses to help people feel heard and understood. Keep responses brief and caring."
+                },
+                {
+                    "role": "user",
+                    "content": user_message
+                }
+            ],
+            model="llama3-8b-8192",
+            temperature=0.7,
+            max_tokens=150
+        )
         
-        # Extract response
-        if isinstance(response, list) and len(response) > 0:
-            bot_response = response[0].get('generated_text', 'I\'m here to listen.')
-        else:
-            bot_response = "I'm here to support you. Tell me more."
+        bot_response = chat_completion.choices[0].message.content
         
         return jsonify({"response": bot_response})
     

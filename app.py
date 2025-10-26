@@ -7,7 +7,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Hugging Face API configuration
-API_URL = "https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium"
+API_URL = "https://api-inference.huggingface.co/models/microsoft/DialoGPT-small"
 HF_TOKEN = "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"  # Your Hugging Face API token
 
 headers = {"Authorization": f"Bearer {HF_TOKEN}"}

@@ -45,7 +45,7 @@ def chat():
                     "content": user_message
                 }
             ],
-            model="llama3-8b-8192",
+            model="llama3llama-3.1-8b-instant-8192",
             temperature=0.7,
             max_tokens=150
         )

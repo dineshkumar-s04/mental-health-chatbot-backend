@@ -7,7 +7,7 @@ import traceback
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 # Groq API configuration - use environment variable (Updated)
-GROQ_API_KEY = os.environ.get('GROQ_API_KEY)
+GROQ_API_KEY = os.environ.get('GROQ_API_KEY')
 
 # Initialize Groq client
 try:
